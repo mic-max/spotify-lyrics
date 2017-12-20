@@ -10,12 +10,13 @@ let logS
 const cmd = 'powershell -command "Get-Process Spotify | where {$_.mainWindowTItle} | Format-List MainWindowTitle"'
 
 function handlePowershellCommand(str) {
-	let wt = str.replace(/\n|\r|MainWindowTitle : /g, '')
-	let dash = wt.indexOf('-')
+	let wt = str.replace(/\n|\r|MainWindowTitle : |\(.*?\)/g, '')
+	// remove The from 'The Beatles'
+	let splits = wt.split(' - ')
 
 	return {
-		artist: wt.substring(0, dash - 1),
-		song:   wt.substring(dash + 2) // until the next dash? exclude features
+		artist: splits[0],
+		song:   splits[1] // until the next dash? exclude features
 	}
 }
 
@@ -25,11 +26,12 @@ function handlePowershellCommand(str) {
 			if(err)
 				throw err
 
+			// pausing and playing should not resend the lyrics request
 			let now = handlePowershellCommand(stdout)
-			if(last.artist !== now.artist && last.song !== now.song) {
+			if(now.artist && last.artist !== now.artist && last.song !== now.song) {
 				for(let i = 0; i < 10; i++)
 					console.log('\n\n\n\n\n\n\n\n\n\n')
-				console.log('  Playing:', now.artist, '-', now.song)
+				console.log('Playing:', now.artist, '-', now.song)
 				console.log('---------------------------------------------------------')
 				lyrics(now.artist + '/' + now.song, (err, data) => {
 					if(err) {
