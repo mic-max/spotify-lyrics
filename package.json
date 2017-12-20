@@ -1,0 +1,20 @@
+{
+  "name": "spotify-lyrics",
+  "version": "1.0.0",
+  "description": "Prints lyrics to currently playing song on spotify.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "spotify",
+    "lyrics"
+  ],
+  "author": "Michael Maxwell",
+  "license": "ISC",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "child_process": "^1.0.2",
+    "request": "^2.83.0"
+  }
+}
