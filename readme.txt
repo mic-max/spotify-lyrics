@@ -1,4 +1,4 @@
-# spotify-lyrics
+spotify-lyrics
 
 Requirements:
 	Download and Install Node.js - https://nodejs.org/en/download/ 
