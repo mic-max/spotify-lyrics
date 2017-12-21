@@ -10,8 +10,8 @@ let logS
 const cmd = 'powershell -command "Get-Process Spotify | where {$_.mainWindowTItle} | Format-List MainWindowTitle"'
 
 function handlePowershellCommand(str) {
-	let wt = str.replace(/\n|\r|MainWindowTitle : |\(.*?\)/g, '')
-	// remove The from 'The Beatles'
+	let wt = str.replace(/\n|\r|MainWindowTitle : | \(.*?\)/g, '')
+	// remove The from the start of artist names
 	let splits = wt.split(' - ')
 
 	return {
@@ -26,14 +26,15 @@ function handlePowershellCommand(str) {
 			if(err)
 				throw err
 
-			// pausing and playing should not resend the lyrics request
 			let now = handlePowershellCommand(stdout)
-			if(now.artist && last.artist !== now.artist && last.song !== now.song) {
+			// console.log('last', last)
+			// console.log('now', now)
+			if(now.artist && now.song && (last.artist !== now.artist || last.song !== now.song)) {
 				for(let i = 0; i < 10; i++)
 					console.log('\n\n\n\n\n\n\n\n\n\n')
 				console.log('Playing:', now.artist, '-', now.song)
 				console.log('---------------------------------------------------------')
-				lyrics(now.artist + '/' + now.song, (err, data) => {
+				lyrics(now.artist, now.song, (err, data) => {
 					if(err) {
 						console.log('Lyrics Unavailable :(')
 						logFile.write('Error: ')
@@ -44,7 +45,10 @@ function handlePowershellCommand(str) {
 					logFile.write(now.artist + ' - ' + now.song + '\n')
 				})
 			}
-			myLoop(now);
+			if(now.artist && now.song)
+				myLoop(now)
+			else
+				myLoop(last)
 		})
 	}, 2000)
 })('')
