@@ -1,18 +1,18 @@
 # spotify-lyrics
 
-##### Requirements
+#### Requirements
 - [Download](https://nodejs.org/en/download/) and Install Node.js
 - Windows Operating System
 - Spotify Desktop Application
 
-##### Instructions
+#### Instructions
 1. `npm install`
 2. `node app`
 
-##### Images
+#### Images
 ![screenshot](https://github.com/mic-max/spotify-lyrics/blob/master/demo.png)
 
-##### Future Development Ideas
+#### Future Development Ideas
 - move spotify current song into a separate module
   - will have a way of determining OS
   - then will run the corresponding script to get the song name and artist
