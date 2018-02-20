@@ -1,3 +1,5 @@
+'use strict'
+
 let child_proc = require('child_process')
 
 const cmd = 'powershell -command "Get-Process Spotify | where {$_.mainWindowTItle} | Format-List MainWindowTitle"'

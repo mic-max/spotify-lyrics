@@ -2,7 +2,7 @@
 
 // move spotify current song into a seperate module
 // will have a way of determining OS
-// then will run the coresponding script to get the song name and artist
+// then will run the corresponding script to get the song name and artist
 // plus any other information easily available
 // if i made it into a .exe: the system type would already be known
 // so would only need to package a single spotify script
@@ -36,6 +36,7 @@
 // have a better console interface
 // always print the song title at the top of the screen
 // get size of terminal with: process.stdout.columns, process.stdout.rows
+// even if we just print the entire lyrics, still try to have the start of them at the top of the console
 // https://nodejs.org/api/tty.html and an event for console resize
 // clear the screen with the right amount of lines
 // only have the chorus printed once
@@ -48,7 +49,7 @@ let colour = require('colour')
 
 let logFile = fs.createWriteStream('log.txt', {flags: 'a'})
 
-let lyrics = require('./lyrics')
+let lyrics = require('./lyrics/services/azlyrics')
 let windows = require('./spotify-info/platforms/windows')
 
 let last = {artist: '', song: ''}
@@ -63,8 +64,6 @@ function handler(err, now) {
     // recursion
   if(now.artist && now.song)
     last = now
-
-  main()
 }
 
 function renderLyrics(now) {
@@ -74,12 +73,12 @@ function renderLyrics(now) {
   }
 
   function printLyrics(data) {
-    console.log(data) // improve the way lyrics are printed
+    console.log(data.magenta) // improve the way lyrics are printed
   }
 
   clearScreen()
-  console.log('Playing:', now.artist.red, '-', now.song.green)
-  console.log('---------------------------------------------------------')
+  console.log(now.artist.red, '-', now.song.cyan)
+  console.log('---------------------------------------------------------'.rainbow)
 
   lyrics(now.artist, now.song, (err, data) => {
     if(err) {
@@ -97,9 +96,6 @@ function shouldLoad(now, last) {
   return now.artist && now.song && (last.artist !== now.artist || last.song !== now.song)
 }
 
-// make this function non-recursive
-(function main() {
-	setTimeout(() => {
-    windows(handler)
-	}, 2000)
-})
+// TODO detect operating system
+// save the corresponding script that gets run every 2 seconds
+setInterval(windows, 2000, handler)
