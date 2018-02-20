@@ -1,7 +1,5 @@
 'use strict'
 
-let lyrics = require('./lyrics')
-
 // move spotify current song into a seperate module
 // will have a way of determining OS
 // then will run the coresponding script to get the song name and artist
@@ -24,6 +22,7 @@ let lyrics = require('./lyrics')
 // put the (ay, ay, ay) - background vocals in a duller font colour
 
 // create a json config file
+// use an actual config package from npm
 // can have information about the user's colour preference
 // order of lyrics websites to query
 // operating system
@@ -46,57 +45,61 @@ let lyrics = require('./lyrics')
 
 let fs = require('fs')
 let colour = require('colour')
-let child_proc = require('child_process')
 
 let logFile = fs.createWriteStream('log.txt', {flags: 'a'})
 
-const cmd = 'powershell -command "Get-Process Spotify | where {$_.mainWindowTItle} | Format-List MainWindowTitle"'
+let lyrics = require('./lyrics')
+let windows = require('./spotify-info/platforms/windows')
 
-function handlePowershellCommand(str) {
-	let wt = str.replace(/\n|\r|MainWindowTitle : | \(.*?\)/g, '')
-	// remove The from the start of artist names
-	let splits = wt.split(' - ')
+let last = {artist: '', song: ''}
 
-	return {
-		artist: splits[0],
-		song:   splits[1] // until the next dash? exclude features
-	}
+function handler(err, now) {
+  if(err)
+    throw err
+
+  if(shouldLoad(now, last))
+    renderLyrics(now)
+
+    // recursion
+  if(now.artist && now.song)
+    last = now
+
+  main()
+}
+
+function renderLyrics(now) {
+  function clearScreen() {
+    for(let i = 0; i < 10; i++)
+      console.log('\n\n\n\n\n\n\n\n\n\n')
+  }
+
+  function printLyrics(data) {
+    console.log(data) // improve the way lyrics are printed
+  }
+
+  clearScreen()
+  console.log('Playing:', now.artist.red, '-', now.song.green)
+  console.log('---------------------------------------------------------')
+
+  lyrics(now.artist, now.song, (err, data) => {
+    if(err) {
+      console.log('Lyrics Unavailable :(')
+      logFile.write('Error: ')
+    } else {
+      printLyrics(data)
+      logFile.write('Good:  ')
+    }
+    logFile.write(now.artist + ' - ' + now.song + '\n') // TODO make a toString for song objects
+  })
+}
+
+function shouldLoad(now, last) {
+  return now.artist && now.song && (last.artist !== now.artist || last.song !== now.song)
 }
 
 // make this function non-recursive
-function main(last) {
+(function main() {
 	setTimeout(() => {
-		child_proc.exec(cmd, function(err, stdout, stderr) {
-			if(err)
-				throw err
-
-			let now = handlePowershellCommand(stdout)
-			// console.log('last', last)
-			// console.log('now', now)
-			if(now.artist && now.song && (last.artist !== now.artist || last.song !== now.song)) {
-				for(let i = 0; i < 10; i++)
-					console.log('\n\n\n\n\n\n\n\n\n\n')
-				console.log('Playing:', now.artist, '-', now.song.green)
-				console.log('---------------------------------------------------------')
-				// have multiple lyrics functions to get and parse lyrics
-				// from different websites as a fallback
-				lyrics(now.artist, now.song, (err, data) => {
-					if(err) {
-						console.log('Lyrics Unavailable :(')
-						logFile.write('Error: ')
-					} else {
-						console.log(data) // improve the way lyrics are printed
-						logFile.write('Good:  ')
-					}
-					logFile.write(now.artist + ' - ' + now.song + '\n')
-				})
-			}
-			if(now.artist && now.song)
-				main(now)
-			else
-				main(last)
-		})
+    windows(handler)
 	}, 2000)
-}
-
-main('')
+})

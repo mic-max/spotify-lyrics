@@ -1,7 +1,7 @@
 'use strict'
 
 let cheerio	= require('cheerio')
-  , request	= require('request')
+let request	= require('request')
 
 function lyrics(artist, song, done) {
 
