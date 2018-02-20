@@ -9,6 +9,4 @@ const scripts = {
   'darwin': require(platform + 'mac')
 }
 
-let os = os.platform()
-console.log('Platform:', os)
-scripts[os]()
+module.exports = scripts[os.platform()]

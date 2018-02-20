@@ -18,6 +18,9 @@ function createUrl(artist, song) {
   return `https://www.azlyrics.com/lyrics/${lyricsLink}.html`
 }
 
+// TODO make a function that determines if the data is correct
+// obviously we're already checking HTTP 200 status, but if the service doesn't follow that protocol :|
+
 function lyrics(artist, song, done) {
 
   let link = createUrl(artist, song)
