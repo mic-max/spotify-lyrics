@@ -22,10 +22,13 @@
   - but would need a different exe for windows, mac and linux
 
 - separate log file into a module
-  - allow it to be optional, by the user (changing the config file)
-  - where to store this file, os.tmpdir(), same directory .exe is run from?
   - when the log is long enough* send it to a server, then delete the user's version
   - have a way to sift through which songs worked and didn't
+
+- add caching to played songs
+  - instead of hitting the lyrics service, use the stored local copy
+  - save it to user's temp folder? os.tmpdir()/spotify-lyrics/songs/TheBeatles/Girl.txt
+  - this would enable offline use for songs already played with the app running
 
 - have different lyric website support
   - azlyrics, genius, musixmatch, etc.
@@ -34,13 +37,7 @@
 - add colours to the lyrics printed to the console
   - different for title, [chorus x2]
   - put the (ay, ay, ay) - background vocals in a duller font colour
-  - create a json config file
-  - use an actual config package from npm
-  - can have information about the user's colour preference
   - order of lyrics websites to query
-  - operating system
-  - log file enabled
-  - delay between checking if the song's changed (increase if using too many resources)
 
 - have the program packaged into a .exe
   - users won't have to install nodejs or create a script to run it

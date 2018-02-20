@@ -9,4 +9,5 @@ const scripts = {
   'darwin': require(platform + 'mac')
 }
 
+// console.log(`[${os.platform()}]`)
 module.exports = scripts[os.platform()]

@@ -2,24 +2,28 @@
 
 let fs = require('fs')
 let colour = require('colour')
-
-let logFile = fs.createWriteStream('log.txt', {flags: 'a'})
+let config = require('config')
 
 let lyrics = require('./lyrics')
-let windows = require('./spotify-info')
+let checkSong = require('./spotify-info')
 
+// GLOBAL VARIABLES
 let last = {artist: '', song: ''}
+let logFile = fs.createWriteStream('log.txt', {flags: 'a'})
+let delay = config.get('delay')
+let logging = config.get('log.enabled')
+
+// INIT
+colour.setTheme(config.get('colour'))
 
 function handler(err, now) {
-  if(err)
-    throw err
-
-  if(shouldLoad(now, last))
+  if(err) {
+    console.log('Cannot find Spotify process.')
+    // throw err
+  } else if(shouldLoad(now, last)) {
     renderLyrics(now)
-
-    // recursion
-  if(now.artist && now.song)
     last = now
+  }
 }
 
 function renderLyrics(now) {
@@ -28,32 +32,41 @@ function renderLyrics(now) {
       console.log('\n\n\n\n\n\n\n\n\n\n')
   }
 
-  function printLyrics(data) {
-    // TODO split on newlines
-    // colour the lines if they match certain criteria. eg. [hook], [intro] [outro] [chorus (x2)] etc.
-    console.log(data.magenta) // improve the way lyrics are printed
-  }
-
-  clearScreen()
-  console.log(now.artist.red, '-', now.song.cyan)
-  console.log('---------------------------------------------------------'.rainbow)
-
-  lyrics(now.artist, now.song, (err, data) => {
+  function printLyrics(err, data) {
     if(err) {
       console.log('Lyrics Unavailable :(')
-      logFile.write('Error: ')
     } else {
-      printLyrics(data)
-      logFile.write('Good:  ')
+      // TODO split on newlines
+      // colour the lines if they match certain criteria. eg. [hook], [intro] [outro] [chorus (x2)] etc.
+      console.log(data.magenta) // improve the way lyrics are printed
     }
-    logFile.write(now.artist + ' - ' + now.song + '\n') // TODO make a toString for song objects
-  })
+  }
+
+  function writeLog(err) {
+    logFile.write(err ? 'Error: ' : 'Good:  ')
+    logFile.write(`${now.artist} - ${now.song}\n`) // TODO make a toString for song objects
+  }
+
+  function lyricsHandler(err, data) {
+    printLyrics(err, data)
+    if(logging)
+      writeLog(err)
+  }
+
+  // START RENDER
+  clearScreen()
+  console.log(now.artist.red, '-', now.song.cyan) // centre this text?
+  console.log('---------------------------------------------------------'.rainbow)
+  lyrics(now.artist, now.song, lyricsHandler)
 }
 
 function shouldLoad(now, last) {
   return now.artist && now.song && (last.artist !== now.artist || last.song !== now.song)
 }
 
-// TODO detect operating system
-// save the corresponding script that gets run every 2 seconds
-setInterval(windows, 2000, handler)
+// MAIN
+if(checkSong != null) {
+  setInterval(checkSong, delay, handler)
+} else {
+  console.log('Operating System Not Supported.')
+}
