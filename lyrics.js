@@ -9,8 +9,11 @@ function lyrics(artist, song, done) {
 	// two-part songs with a slace to seperate them:
 		// extraordinary girl/letterbomb
 		// face to face / short circuit
+		// thursday/froze over - "interlude" => thursdayfrozeoverinterlude
 	// artist names like USS (Ubiquity Synergy Seeker)
 		// use the full name for az lyrics
+	// or do a google / azlyrics search for the song
+		// then follow that link...
 	const whole = artist.replace(/^the /ig, '') + '/' + song
 	const lyricsLink = whole.toLowerCase().replace(/[^a-z0-9/]/g, '')
 	const link = `https://www.azlyrics.com/lyrics/${lyricsLink}.html`
