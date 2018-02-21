@@ -21,10 +21,10 @@ function createUrl(artist, song) {
 // TODO make a function that determines if the data is correct
 // obviously we're already checking HTTP 200 status, but if the service doesn't follow that protocol :|
 
-function azlyrics(artist, song, done) {
+function azlyrics(music, done) {
   // console.log('azlyrics check')
 
-  let link = createUrl(artist, song)
+  let link = createUrl(music.artist, music.song)
 
 	// TODO: check if link is a valid url before doing the request
 	// for example more than one '/'  (might change the seperating character)

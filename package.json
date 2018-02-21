@@ -3,13 +3,22 @@
   "version": "0.0.2",
   "description": "Prints lyrics to currently playing song on spotify.",
   "main": "app.js",
+  "bin": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dist": "pkg . --out-path bin"
   },
   "keywords": [
     "spotify",
     "lyrics"
   ],
+  "pkg": {
+    "scripts": [
+      "spotify-info/platforms/*.js",
+      "lyrics/services/*.js"
+    ],
+    "assets": ""
+  },
   "author": "Michael Maxwell",
   "license": "ISC",
   "dependencies": {

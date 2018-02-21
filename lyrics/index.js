@@ -8,13 +8,13 @@ const lyrics = [
   'LAST'
 ]
 
-function loadLyrics(artist, song, done) {
+function loadLyrics(music, done) {
 
   for(let lyric of lyrics) {
     if(lyric === 'LAST')
       return done('Lyrics Unavailable :(')
 
-    lyric(artist, song, (err, data) => {
+    lyric(music, (err, data) => {
       if(!err) {
         done(null, data)
       }

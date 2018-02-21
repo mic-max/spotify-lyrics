@@ -55,9 +55,9 @@ function renderLyrics(now) {
 
   // START RENDER
   clearScreen()
-  console.log(now.artist.red, '-', now.song.cyan) // centre this text?
+  console.log(`${now.artist.red} - ${now.song.cyan}`) // centre this text?
   console.log('---------------------------------------------------------'.rainbow)
-  lyrics(now.artist, now.song, lyricsHandler)
+  lyrics(now, lyricsHandler)
 }
 
 function shouldLoad(now, last) {
