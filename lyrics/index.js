@@ -1,10 +1,26 @@
 'use strict'
 
-const service = './services/'
-const lyrics = {
-  'azlyrics': require(service + 'azlyrics'),
-  'genius': require(service + 'genius'),
-  'musixmatch': require(service + 'musixmatch')
+const srv = './services/'
+const lyrics = [
+  require(srv + 'azlyrics'),
+  require(srv + 'genius'),
+  require(srv + 'musixmatch'),
+  'LAST'
+]
+
+function loadLyrics(artist, song, done) {
+
+  for(let lyric of lyrics) {
+    if(lyric === 'LAST')
+      return done('Lyrics Unavailable :(')
+
+    lyric(artist, song, (err, data) => {
+      if(!err) {
+        done(null, data)
+      }
+    })
+  }
 }
 
-module.exports = lyrics['azlyrics']
+// module.exports = loadLyrics
+module.exports = lyrics[0]

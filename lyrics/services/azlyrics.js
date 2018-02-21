@@ -21,7 +21,8 @@ function createUrl(artist, song) {
 // TODO make a function that determines if the data is correct
 // obviously we're already checking HTTP 200 status, but if the service doesn't follow that protocol :|
 
-function lyrics(artist, song, done) {
+function azlyrics(artist, song, done) {
+  // console.log('azlyrics check')
 
   let link = createUrl(artist, song)
 
@@ -39,4 +40,4 @@ function lyrics(artist, song, done) {
 	})
 }
 
-module.exports = lyrics
+module.exports = azlyrics
