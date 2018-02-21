@@ -6,8 +6,20 @@
 - Spotify Desktop Application
 
 #### Instructions
+###### Run using Node
 1. `npm install`
 2. `node app`
+
+_or_
+###### Build Executable
+1. `npm install`
+2. `npm run-script dist`
+3. `./bin/spotify-lyrics-win.exe`
+
+_or_
+###### Download Executable
+1. [Download](#) - Not available yet
+2. Run the executable
 
 #### Images
 ![screenshot](https://github.com/mic-max/spotify-lyrics/blob/master/demo.png)
