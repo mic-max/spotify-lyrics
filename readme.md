@@ -1,7 +1,6 @@
 # spotify-lyrics
 
 #### Requirements
--
 - Windows Operating System
 - Spotify Desktop Application
 
