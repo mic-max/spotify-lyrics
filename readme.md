@@ -1,7 +1,6 @@
 # spotify-lyrics
 
 #### Requirements
--
 - Windows Operating System
 - Spotify Desktop Application
 
@@ -52,12 +51,9 @@ _or_
 
 - have a better console interface
   - always print the song title at the top of the screen
-  - get size of terminal with: process.stdout.columns, process.stdout.rows
-  - even if we just print the entire lyrics, still try to have the start of them at the top of the console
-  - https://nodejs.org/api/tty.html and an event for console resize
-  - clear the screen with the right amount of lines
+    - working for songs that have less lines than your terminal :)
+    - look into a way to scroll cursor, or use an ncurses-esque library
   - only have the chorus printed once
   - have some sort of scrolling for the lyrics along with how far into the song they are?
   - hard because i don't think we can know if the user skips along in the song, or listens to it twice in a row
   - pausing does work, will need to know length of song in seconds and implement an algorithm for karaoke rendering
-  - research how consoles can be edited, without creating a new line
