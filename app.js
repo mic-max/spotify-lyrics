@@ -27,24 +27,32 @@ function handler(err, now) {
 }
 
 function renderLyrics(now) {
-  function clearScreen() {
-    for(let i = 0; i < 10; i++)
-      console.log('\n\n\n\n\n\n\n\n\n\n')
+  function clearScreen(numLines) {
+    const rows = process.stdout.rows
+    try {
+      console.log('\n'.repeat(rows - numLines - 4))
+    } catch(e) {} // or -- if(rows - numLines - 4 > 0 ... console.log('\n'.repeat))
   }
 
   function printLyrics(err, data) {
     if(err) {
       console.log('Lyrics Unavailable :(')
     } else {
-      // TODO split on newlines
+      const lines = data.split('\n')
+      // if a line length is longer than the terminal width it may wrap to the next line.
+        // meaning it would print an extra newline for each of these
       // colour the lines if they match certain criteria. eg. [hook], [intro] [outro] [chorus (x2)] etc.
-      console.log(data.magenta) // improve the way lyrics are printed
+      for(let line of lines) {
+        console.log(line.white) // improve the way lyrics are printed
+      }
+      clearScreen(lines.length)
     }
   }
 
   function writeLog(err) {
     logFile.write(err ? 'Error: ' : 'Good:  ')
     logFile.write(`${now.artist} - ${now.song}\n`) // TODO make a toString for song objects
+    // write more info, like when user closes spotify, timestamps, etc. in a json format
   }
 
   function lyricsHandler(err, data) {
@@ -54,7 +62,6 @@ function renderLyrics(now) {
   }
 
   // START RENDER
-  clearScreen()
   console.log(`${now.artist.red} - ${now.song.cyan}`) // centre this text?
   console.log('---------------------------------------------------------'.rainbow)
   lyrics(now, lyricsHandler)
