@@ -6,6 +6,8 @@ let request	= require('request')
 // u2 -> u2band
 // two-part songs with a slace to seperate them:
 // extraordinary girl/letterbomb
+// ke$ha, Pe$Os by pouya
+// comma separated artists -> check both
 // face to face / short circuit
 // thursday/froze over - "interlude" => thursdayfrozeoverinterlude
 // artist names like USS (Ubiquity Synergy Seeker)
@@ -14,7 +16,9 @@ let request	= require('request')
 // then follow that link...
 function createUrl(artist, song) {
   const whole = artist.replace(/^the /ig, '') + '/' + song
-  const lyricsLink = whole.toLowerCase().replace(/[^a-z0-9/]/g, '')
+  const lyricsLink = whole.toLowerCase()
+  	.replace(/\(.*?\)/g, '')   // delete anything in brackets
+  	.replace(/[^a-z0-9/]/g, '')
   return `https://www.azlyrics.com/lyrics/${lyricsLink}.html`
 }
 
@@ -25,6 +29,7 @@ function azlyrics(music, done) {
   // console.log('azlyrics check')
 
   let link = createUrl(music.artist, music.song)
+  console.log(link)
 
 	// TODO: check if link is a valid url before doing the request
 	// for example more than one '/'  (might change the seperating character)

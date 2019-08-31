@@ -2,7 +2,6 @@
 
 let child_proc = require('child_process')
 
-const cmd = 'powershell -command "gps Spotify | where {$_.mainWindowTitle} | fl MainWindowTitle"'
 
 function handlePS(str) {
 	const wt = str.trim().match(/^MainWindowTitle : (.*)$/)[1]
@@ -22,11 +21,12 @@ function handlePS(str) {
 }
 
 module.exports = function(cb) {
-  child_proc.exec(cmd, (err, stdout) => {
-    if(err)
-      cb(err)
+	const cmd = 'powershell -command "gps Spotify | where {$_.mainWindowTitle} | fl MainWindowTitle"'
+	child_proc.exec(cmd, (err, stdout) => {
+		if (err)
+			cb(err)
 
-    let now = handlePS(stdout)
-    cb(null, now)
-  })
+		let now = handlePS(stdout)
+		cb(null, now)
+	})
 }
