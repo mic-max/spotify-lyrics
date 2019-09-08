@@ -1,9 +1,9 @@
 'use strict'
 
 const lyrics = [
-	require('azlyrics'),
-	require('musixmatch'),
-	require('genius'),
+	require('./azlyrics'),
+	require('./musixmatch'),
+	require('./genius'),
 	'LAST'
 ]
 
