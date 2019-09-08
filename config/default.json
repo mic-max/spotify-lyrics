@@ -1,33 +1,33 @@
 {
-  "delay": 2000,
+	"delay": 2000,
 
-  "log": {
-    "enabled": false,
-    "file": "/spotify-lyrics/log.txt",
-    "max_size": 8000
-  },
+	"log": {
+		"enabled": true,
+		"file": "/spotify-lyrics/log.txt",
+		"max_size": 8000
+	},
 
-  "cache": {
-    "enabled": false,
-    "folder": "/spotify-lyrics/songs/"
-  },
+	"cache": {
+		"enabled": false,
+		"folder": "/spotify-lyrics/songs/"
+	},
 
-  "display": {
-    "background-vocals": "grey",
-    "section-tag": "white",
-    "repeat": "green"
-  },
+	"display": {
+		"background-vocals": "grey",
+		"section-tag": "white",
+		"repeat": "green"
+	},
 
-  "colour": {
-    "silly": "rainbow",
-    "input": "grey",
-    "verbose": "cyan",
-    "prompt": "grey",
-    "info": "green",
-    "data": "grey",
-    "help": "cyan",
-    "warn": ["yellow", "underline"],
-    "debug": "blue",
-    "error": "red bold"
-  }
+	"colour": {
+		"silly": "rainbow",
+		"input": "grey",
+		"verbose": "cyan",
+		"prompt": "grey",
+		"info": "green",
+		"data": "grey",
+		"help": "cyan",
+		"warn": ["yellow", "underline"],
+		"debug": "blue",
+		"error": "red bold"
+	}
 }

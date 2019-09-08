@@ -1,6 +1,6 @@
 'use strict'
 
-let child_proc = require('child_process')
+const child_proc = require('child_process')
 
 const cmd1 = `wmctrl -lp | awk '{printf "%d,%s\n", $3, substr($0, index($0,$5))}'`
 
@@ -43,6 +43,4 @@ module.exports = function(cb) {
 		else
 			cb(null, now)
 	})
-
-  // cb(null, {artist: 'kanye west', song: 'only one'})
 }

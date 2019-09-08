@@ -1,79 +1,83 @@
 'use strict'
 
-let fs = require('fs')
-let colour = require('colour')
-let config = require('config')
+const fs = require('fs')
 
-let lyrics = require('./lyrics')
-let checkSong = require('./spotify-info')
+const colour = require('colour')
+const config = require('config')
+const ora = require('ora')
 
-// GLOBAL VARIABLES
-let last = {artist: '', song: ''}
-let logFile = fs.createWriteStream('log.txt', {flags: 'a'})
+const lyrics = require('./lyrics')
+const checkSong = require(`./platforms/${require('os').platform()}`)
+
+let last = {}
 let delay = config.get('delay')
 let logging = config.get('log.enabled')
-
-// INIT
-colour.setTheme(config.get('colour'))
-
-function handler(err, now) {
-  if(err) {
-    console.log('Cannot find Spotify process.')
-    // throw err
-  } else if(shouldLoad(now, last)) {
-    renderLyrics(now)
-    last = now
-  }
-}
+let logFile = fs.createWriteStream('log.txt', {flags: 'a'})
 
 function renderLyrics(now) {
-  function clearScreen(numLines) {
-    const rows = process.stdout.rows
-    try {
-      console.log('\n'.repeat(rows - numLines - 4))
-    } catch(e) {} // or -- if(rows - numLines - 4 > 0 ... console.log('\n'.repeat))
-  }
+	const clearScreen = numLines =>
+		console.log('\n'.repeat(Math.max(process.stdout.rows - numLines - 4, 0)))
 
-  function printLyrics(err, data) {
-    if(err) {
-      console.log('Lyrics Unavailable :(')
-    } else {
-      const lines = data.split('\n')
-      // if a line length is longer than the terminal width it may wrap to the next line.
-        // meaning it would print an extra newline for each of these
-      // colour the lines if they match certain criteria. eg. [hook], [intro] [outro] [chorus (x2)] etc.
-      for(let line of lines) {
-        console.log(line.white) // improve the way lyrics are printed
-      }
-      clearScreen(lines.length)
-    }
-  }
+	function printLyrics(err, data) {
+		if (err)
+			return console.log(err, ':(') // TODO: emoji
+		
+		const lines = data.split('\n')
+		for (let line of lines) {
+			if (line.match(/^\[.*?\]$/g))
+				console.log(line.blue)
+			else {
+			  let found = line.match(/^(.*?)(\(.+?\))?$/)
+			  console.log(found[1].white + (found[2] ? found[2].grey : ''))
+			}
+		}
 
-  function writeLog(err) {
-    logFile.write(err ? 'Error: ' : 'Good:  ')
-    logFile.write(`${now.artist} - ${now.song}\n`) // TODO make a toString for song objects
-    // write more info, like when user closes spotify, timestamps, etc. in a json format
-  }
+		clearScreen(lines.length)
+	}
 
-  function lyricsHandler(err, data) {
-    printLyrics(err, data)
-    if(logging)
-      writeLog(err)
-  }
+	function writeLog(err) {
+		if (!logging)
+			return
 
-  // START RENDER
-  console.log(`${now.artist.red} - ${now.song.cyan}`) // centre this text?
-  console.log('---------------------------------------------------------'.rainbow)
-  lyrics(now, lyricsHandler)
+		logFile.write(err ? 'Error: ' : 'Good:  ')
+		logFile.write(`${now.artist} - ${now.song}\n`)
+	}
+
+	console.log(`${now.artist.magenta} - ${now.song.cyan}`)
+	console.log('-'.repeat(80).rainbow)
+	lyrics(now, (err, data) => {
+		printLyrics(err, data)
+		writeLog(err)
+	})
 }
 
-function shouldLoad(now, last) {
-  return now.artist && now.song && (last.artist !== now.artist || last.song !== now.song)
+function songFromWindowTitle(wt) {
+	const info = wt.match(/^(.*?) - (.*)$/)
+	return { artist: info[1], song: info[2] }
 }
+
+const shouldLoad = now =>
+	now.artist && now.song && JSON.stringify(last) !== JSON.stringify(now)
 
 // MAIN
-if(checkSong != null) {
-  setInterval(checkSong, delay, handler)
-} else {
-  console.log('Operating System Not Supported.')
-}
+if (!checkSong)
+	return console.log('Operating System Not Supported.')
+
+colour.setTheme(config.get('colour'))
+const spinner = ora('Loading').start()
+
+setInterval(checkSong, delay, (err, wt) => {
+	if (err)
+		return spinner.text = 'Cannot find Spotify process'
+
+	if (['Spotify Premium', 'Spotify Free', 'Spotify'].includes(wt))
+		return spinner.text = 'Nothing playing on Spotify'
+
+	spinner.stop()
+	const now = songFromWindowTitle(wt)
+
+	if (shouldLoad(now)) {
+		renderLyrics(now)
+		last = now
+	}
+})
