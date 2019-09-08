@@ -15,6 +15,7 @@ let logging = config.get('log.enabled')
 let logFile = fs.createWriteStream('log.txt', {flags: 'a'})
 
 function renderLyrics(now) {
+	// count lines > console.width
 	const clearScreen = numLines =>
 		console.log('\n'.repeat(Math.max(process.stdout.rows - numLines - 4, 0)))
 
@@ -32,7 +33,8 @@ function renderLyrics(now) {
 			}
 		}
 
-		clearScreen(lines.length)
+		let wideys = lines.filter(v => v.length > process.stdout.columns).length
+		clearScreen(lines.length + wideys)
 	}
 
 	function writeLog(err) {
