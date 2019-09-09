@@ -27,7 +27,7 @@ _or_
 ![screenshot](https://github.com/mic-max/spotify-lyrics/blob/master/demo.png)
 
 #### Submission
-0. Run test suite `npm run test`
+0. Run test suite `npm test`
 1. Run linter `npm run lint`
 2. Test run a few songs
 
