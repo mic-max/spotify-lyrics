@@ -19,7 +19,9 @@ function azlyrics(music, done) {
 			return done('Not Available on AZLyrics')
 
 		let $ = cheerio.load(body)
-		const rawData = $('div').eq(21).text().trim()
+		const rawData = $('div').eq(21)
+			.text()
+			.trim()
 		done(null, rawData)
 	})
 }

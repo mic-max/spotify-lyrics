@@ -28,8 +28,8 @@ function renderLyrics(now) {
 			if (line.match(/^\[.*?\]$/g))
 				console.log(line.blue)
 			else {
-			  let found = line.match(/^(.*?)(\(.+?\))?$/)
-			  console.log(found[1].white + (found[2] ? found[2].grey : ''))
+				let found = line.match(/^(.*?)(\(.+?\))?$/)
+				console.log(found[1].white + (found[2] ? found[2].grey : ''))
 			}
 		}
 
@@ -54,7 +54,7 @@ function renderLyrics(now) {
 }
 
 function songFromWindowTitle(wt) {
-	const info = wt.match(/^(.*?) - (.*)$/)
+	const info = wt.match(/^(.*?) - (.*?)(?: - .*)?$/)
 	return { artist: info[1], song: info[2] }
 }
 

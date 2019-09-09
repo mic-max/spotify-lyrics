@@ -4,7 +4,7 @@ const cheerio = require('cheerio')
 const request = require('request')
 
 function createUrl(artist, song) {
-	const whole = artist.replace(/^the /ig, '') + '/' + song
+	const whole = `${artist.replace(/^the /ig, '')}/${song}`
 	const lyricsLink = whole.toLowerCase()
 		.replace(/[^a-z0-9 /]/g, '')
 		.replace(/ /g, '-')

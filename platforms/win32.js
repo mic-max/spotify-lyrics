@@ -2,7 +2,7 @@
 
 let child_proc = require('child_process')
 
-module.exports = function(cb) {
+function windows(cb) {
 	const cmd = 'powershell -command "gps Spotify | where {$_.mainWindowTitle} | fl MainWindowTitle"'
 	child_proc.exec(cmd, (err, stdout) => {
 		if (err)
@@ -12,3 +12,5 @@ module.exports = function(cb) {
 		cb(null, wt)
 	})
 }
+
+module.exports = windows

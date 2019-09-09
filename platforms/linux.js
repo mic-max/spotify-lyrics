@@ -2,6 +2,7 @@
 
 const child_proc = require('child_process')
 
+/* eslint quotes: "off"*/
 const cmd1 = `wmctrl -lp | awk '{printf "%d,%s\n", $3, substr($0, index($0,$5))}'`
 
 function getAppWindowsInfo(str) {
@@ -19,16 +20,16 @@ function getAppWindowsInfo(str) {
 
 function isPIDSpotify(pid) {
 	const cmd = `ps ${pid} | grep spotify`
-	child_proc.exec(cmd, (err) => {
+	child_proc.exec(cmd, err => {
 		console.log(err)
-		return err == 0
+		return err === 0
 	})
 }
 
-module.exports = function(cb) {
+function linux(cb) {
 	child_proc.exec(cmd1, (err, stdout) => {
 		if (err)
-			cb(err)
+			return cb(err)
 
 		let title = ''
 		let wins = getAppWindowsInfo(stdout)
@@ -38,9 +39,10 @@ module.exports = function(cb) {
 				break
 		}
 
-		if (title == '')
-			cb('no found process')
-		else
-			cb(null, now)
+		if (title === '')
+			return cb(true)
+		return cb(null, title)
 	})
 }
+
+module.exports = linux

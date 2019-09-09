@@ -1,5 +1,7 @@
 'use strict'
 
-module.exports = function(cb) {
+function mac(cb) {
 	cb(null, {artist: 'bryson tiller', song: 'dont'})
 }
+
+module.exports = mac
