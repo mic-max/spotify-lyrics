@@ -26,6 +26,11 @@ _or_
 #### Images
 ![screenshot](https://github.com/mic-max/spotify-lyrics/blob/master/demo.png)
 
+#### Submission
+0. Run test suite `npm run test`
+1. Run linter `npm run lint`
+2. Test run a few songs
+
 #### Future Development Ideas
 - move spotify current song into a separate module
   - then will run the corresponding script to get the song name and artist
