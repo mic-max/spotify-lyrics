@@ -1,6 +1,6 @@
 'use strict'
 
-let child_proc = require('child_process')
+const child_proc = require('child_process')
 
 function windows(cb) {
 	const cmd = 'powershell -command "gps Spotify | where {$_.mainWindowTitle} | fl MainWindowTitle"'
@@ -8,8 +8,11 @@ function windows(cb) {
 		if (err)
 			return cb(err)
 
-		let wt = stdout.trim().match(/^MainWindowTitle : (.*)$/)[1]
-		cb(null, wt)
+		const wt = stdout.trim().match(/^MainWindowTitle : (.*)$/)
+
+		if (wt)
+			return cb(null, wt[1])
+		return cb(true)
 	})
 }
 
