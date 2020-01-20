@@ -8,7 +8,9 @@
 ###### Run using Node
 0. [Download](https://nodejs.org/en/download/) and Install Node.js
 1. `npm install`
-2. `npm start`
+2. `pip install -U pillow`
+3. Open spotify and play a song
+4. `npm start --fullscreen`
 
 _or_
 ###### Build Executable (currently broken)
@@ -24,12 +26,24 @@ _or_
 1. Run the executable from a terminal
 
 #### Images
-![screenshot](https://github.com/mic-max/spotify-lyrics/blob/master/demo.png)
+![screenshot](../media/demo.png?raw=true)
 
 #### Submission
 0. Run test suite `npm test`
 1. Run linter `npm run lint`
 2. Test run a few songs
+
+Command to copy all JFIF files from spotify cache directory up a level
+`C:/Users/PROLE/AppData/Local/Packages/SpotifyAB.SpotifyMusic_zpdnekdrzrea0/LocalCache/Spotify/Data`
+`find . -type f | xargs file | grep JFIF | cut -d':' -f1 | xargs -I {} cp {} .`
+Next step will be to rename all these files to have a .jfif extension
+`find . -maxdepth 1 -type f | cut -d'.' -f2 | xargs -I {} mv .{}.file .{}.jfif`
+Now that we have a directory of album art that spotify has cached, can we tell which one is the current song?
+Check other files that have been modified recently for information... hex file name?
+`cd C:\Users\PROLE\AppData\Local\Packages\SpotifyAB.SpotifyMusic_zpdnekdrzrea0\LocalCache\Spotify\Browser\Cache`
+`mkdir hi`
+`find . -maxdepth 1 -type f | xargs file | grep JFIF | cut -d':' -f1 | xargs -I {} cp {} ./hi/{}.jfif`
+
 
 #### Future Development Ideas
 - move spotify current song into a separate module
@@ -62,3 +76,5 @@ _or_
     - hard because i don't think we can know if the user skips along in the song, or listens to it twice in a row
     - pausing does work, will need to know length of song in seconds and implement an algorithm for karaoke rendering
     - or get song info with timestamps on each line ex. [00:05] 
+
+- bug where if cmder is minimized the song colours are weird

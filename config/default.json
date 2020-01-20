@@ -16,18 +16,5 @@
 		"background-vocals": "grey",
 		"section-tag": "white",
 		"repeat": "green"
-	},
-
-	"colour": {
-		"silly": "rainbow",
-		"input": "grey",
-		"verbose": "cyan",
-		"prompt": "grey",
-		"info": "green",
-		"data": "grey",
-		"help": "cyan",
-		"warn": ["yellow", "underline"],
-		"debug": "blue",
-		"error": "red bold"
 	}
 }
