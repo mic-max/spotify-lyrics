@@ -1,6 +1,6 @@
 {
 	"name": "spotify-lyrics",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Prints lyrics to currently playing song on spotify.",
 	"main": "index.js",
 	"scripts": {
@@ -12,6 +12,9 @@
 		"spotify",
 		"lyrics"
 	],
+	"bin": {
+		"lyrics": "index.js"
+	},
 	"files": [
 		"index.js",
 		"lyrics/index.js",

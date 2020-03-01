@@ -57,8 +57,10 @@ const shouldLoad = now =>
 	now.artist && now.song && JSON.stringify(last) !== JSON.stringify(now)
 
 // MAIN
-if (!playing)
-	return console.log('Operating System Not Supported.')
+if (!playing) {
+	console.log('Operating System Not Supported.')
+	process.exit(1)
+}
 
 colour.setTheme(config.get('colour'))
 const spinner = ora('Loading').start()
