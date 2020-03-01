@@ -5,14 +5,14 @@ const fs = require('fs')
 const colour = require('colour')
 const config = require('config')
 const ora = require('ora')
+const playing = require('spotify-playing')
 
 const lyrics = require('./lyrics')
-const checkSong = require(`./platforms/${require('os').platform()}`)
 
 let last = {}
 let delay = config.get('delay')
 let logging = config.get('log.enabled')
-let logFile = fs.createWriteStream('log.txt', {flags: 'a'})
+let logFile = fs.createWriteStream('out/log.txt', {flags: 'a'})
 
 function renderLyrics(now) {
 	// count lines > console.width
@@ -53,30 +53,24 @@ function renderLyrics(now) {
 	})
 }
 
-function songFromWindowTitle(wt) {
-	const info = wt.match(/^(.*?) - (.*?)(?: - .*)?$/)
-	return { artist: info[1], song: info[2] }
-}
-
 const shouldLoad = now =>
 	now.artist && now.song && JSON.stringify(last) !== JSON.stringify(now)
 
 // MAIN
-if (!checkSong)
+if (!playing)
 	return console.log('Operating System Not Supported.')
 
 colour.setTheme(config.get('colour'))
 const spinner = ora('Loading').start()
 
-setInterval(checkSong, delay, (err, wt) => {
+setInterval(playing, delay, (err, now) => {
 	if (err)
 		return spinner.text = 'Cannot find Spotify process'
 
-	if (['Spotify Premium', 'Spotify Free', 'Spotify'].includes(wt))
+	if (!now)
 		return spinner.text = 'Nothing playing on Spotify'
 
 	spinner.stop()
-	const now = songFromWindowTitle(wt)
 
 	if (shouldLoad(now)) {
 		renderLyrics(now)
