@@ -1,12 +1,11 @@
 {
 	"name": "spotify-lyrics",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"description": "Prints lyrics to currently playing song on spotify.",
 	"main": "index.js",
 	"scripts": {
-		"test": "mocha",
-		"start": "node index.js",
-		"lint": "npx eslint ."
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": "node index.js"
 	},
 	"keywords": [
 		"spotify",
@@ -20,10 +19,13 @@
 		"lyrics/index.js",
 		"lyrics/azlyrics.js",
 		"lyrics/genius.js",
-		"lyrics/musixmatch.js",
-		"config/default.json"
+		"lyrics/musixmatch.js"
 	],
-	"author": "Michael Maxwell",
+	"author": {
+		"name": "Michael Maxwell",
+		"email": "yo@micmax.pw",
+		"url": "https://micmax.pw"
+	},
 	"license": "ISC",
 	"dependencies": {
 		"cheerio": "^1.0.0-rc.2",
@@ -32,9 +34,5 @@
 		"ora": "^3.4.0",
 		"request": "^2.88.0",
 		"spotify-playing": "^1.0.1"
-	},
-	"devDependencies": {
-		"eslint": "^6.3.0",
-		"mocha": "^6.2.0"
 	}
 }

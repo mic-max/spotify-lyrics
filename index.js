@@ -4,14 +4,14 @@
 const fs = require('fs')
 
 const colour = require('colour')
-const config = require('config')
+// const config = require('config')
 const ora = require('ora')
 const playing = require('spotify-playing')
 
 const lyrics = require('./lyrics')
 
 let last = {}
-let delay = config.get('delay')
+// let delay = config.get('delay')
 let logging = config.get('log.enabled')
 let logFile = fs.createWriteStream('out/log.txt', {flags: 'a'})
 
@@ -66,7 +66,7 @@ if (!playing) {
 colour.setTheme(config.get('colour'))
 const spinner = ora('Loading').start()
 
-setInterval(playing, delay, (err, now) => {
+setInterval(playing, 1500, (err, now) => {
 	if (err)
 		return spinner.text = 'Cannot find Spotify process'
 
