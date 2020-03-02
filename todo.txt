@@ -7,13 +7,6 @@
   - save it to user's temp folder? os.tmpdir()/spotify-lyrics/songs/TheBeatles/Girl.txt
   - this would enable offline use for songs already played with the app running
 
-- separate lyric fetching to a new module 
-  - have different lyric website support: azlyrics, genius, musixmatch, etc.
-  - the program should try all of these in succession until proper lyrics are found
-  - order of lyrics websites to query
-
-- separate album art module, use colours from it / pixel art :)
-
 - support mac os
   - use an applescript to get window information maybe
   - run script with osascript /path/to/file.scpt

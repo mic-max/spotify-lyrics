@@ -16,10 +16,7 @@
 	},
 	"files": [
 		"index.js",
-		"lyrics/index.js",
-		"lyrics/azlyrics.js",
-		"lyrics/genius.js",
-		"lyrics/musixmatch.js"
+		"lyrics"
 	],
 	"author": {
 		"name": "Michael Maxwell",
@@ -28,10 +25,9 @@
 	},
 	"license": "ISC",
 	"dependencies": {
-		"cheerio": "^1.0.0-rc.2",
 		"colour": "^0.7.1",
-		"node-fetch": "^2.6.0",
 		"ora": "^4.0.3",
-		"spotify-playing": "^1.0.1"
+		"spotify-playing": "^1.0.1",
+		"lyric-fetcher": "^1.0.0"
 	}
 }

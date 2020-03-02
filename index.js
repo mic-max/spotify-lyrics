@@ -7,7 +7,7 @@ const colour = require('colour')
 const ora = require('ora')
 const playing = require('spotify-playing')
 
-const lyrics = require('./lyrics')
+const lyrics = require('lyric-fetcher')
 
 let logFile = fs.createWriteStream('out/log.txt', {flags: 'a'})
 
