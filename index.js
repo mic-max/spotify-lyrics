@@ -1,15 +1,11 @@
 #!/usr/bin/env node
 'use strict'
 
-const fs = require('fs')
-
 const colour = require('colour')
 const ora = require('ora')
 const playing = require('spotify-playing')
 
 const lyrics = require('lyric-fetcher')
-
-let logFile = fs.createWriteStream('out/log.txt', {flags: 'a'})
 
 function renderLyrics(now) {
 	// count lines > console.width
@@ -34,16 +30,10 @@ function renderLyrics(now) {
 		clearScreen(lines.length + wideys)
 	}
 
-	function writeLog(err) {
-		logFile.write(err ? 'Error: ' : 'Good:  ')
-		logFile.write(`${now.artist} - ${now.song}\n`)
-	}
-
 	console.log(`${now.artist.magenta} - ${now.song.cyan}`)
 	console.log('-'.repeat(80).rainbow)
 	lyrics(now, (err, data) => {
 		printLyrics(err, data)
-		writeLog(err)
 	})
 }
 
