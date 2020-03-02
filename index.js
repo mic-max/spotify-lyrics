@@ -4,15 +4,11 @@
 const fs = require('fs')
 
 const colour = require('colour')
-// const config = require('config')
 const ora = require('ora')
 const playing = require('spotify-playing')
 
 const lyrics = require('./lyrics')
 
-let last = {}
-// let delay = config.get('delay')
-let logging = config.get('log.enabled')
 let logFile = fs.createWriteStream('out/log.txt', {flags: 'a'})
 
 function renderLyrics(now) {
@@ -39,9 +35,6 @@ function renderLyrics(now) {
 	}
 
 	function writeLog(err) {
-		if (!logging)
-			return
-
 		logFile.write(err ? 'Error: ' : 'Good:  ')
 		logFile.write(`${now.artist} - ${now.song}\n`)
 	}
@@ -54,29 +47,30 @@ function renderLyrics(now) {
 	})
 }
 
-const shouldLoad = now =>
-	now.artist && now.song && JSON.stringify(last) !== JSON.stringify(now)
-
 // MAIN
 if (!playing) {
 	console.log('Operating System Not Supported.')
 	process.exit(1)
 }
 
-colour.setTheme(config.get('colour'))
+let last = {}
 const spinner = ora('Loading').start()
 
-setInterval(playing, 1500, (err, now) => {
-	if (err)
-		return spinner.text = 'Cannot find Spotify process'
+!function main() {
+	playing((err, now) => {
+		if (err)
+			return spinner.text = 'Cannot find Spotify process'
 
-	if (!now)
-		return spinner.text = 'Nothing playing on Spotify'
+		if (!now)
+			return spinner.text = 'Nothing playing on Spotify'
 
-	spinner.stop()
+		spinner.stop()
 
-	if (shouldLoad(now)) {
-		renderLyrics(now)
-		last = now
-	}
-})
+		if (now.artist && now.song && JSON.stringify(last) !== JSON.stringify(now)) {
+			// TODO: show loading spinner while fetching lyrics
+			renderLyrics(now)
+			last = now
+		}
+		setTimeout(main, 1500)
+	})
+}()

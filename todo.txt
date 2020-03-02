@@ -1,6 +1,3 @@
-- remove delay at start of program
-  - it waits for config.delay amount of milliseconds before checking spotify
-
 - separate log file into a module
   - when the log is long enough* send it to a server, then delete the user's version
   - have a way to sift through which songs worked and didn't

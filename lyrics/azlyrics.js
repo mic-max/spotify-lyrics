@@ -1,7 +1,7 @@
 'use strict'
 
 const cheerio = require('cheerio')
-const request = require('request')
+const fetch = require('node-fetch');
 
 function createUrl(artist, song) {
 	const whole = `${artist.replace(/^the /ig, '')}/${song.replace(/\//g, '')}`
@@ -14,16 +14,18 @@ function createUrl(artist, song) {
 function azlyrics(music, done) {
 	let link = createUrl(music.artist, music.song)
 
-	request(link, (err, res, body) => {
-		if (err || res.statusCode !== 200)
+	fetch(link)
+		.then(res => res.text())
+		.then(body => {
+			let $ = cheerio.load(body)
+			// TODO: check that page isn't the welcome page
+			// test with Daft Punk - Aerodynamic
+			const rawData = $('div').eq(19).text().trim()
+			done(null, rawData)
+		})
+		.catch(err => {
 			return done('Not Available on AZLyrics')
-
-		let $ = cheerio.load(body)
-		const rawData = $('div').eq(19)
-			.text()
-			.trim()
-		done(null, rawData)
-	})
+		})
 }
 
 module.exports = azlyrics

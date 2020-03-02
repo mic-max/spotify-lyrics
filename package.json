@@ -30,9 +30,8 @@
 	"dependencies": {
 		"cheerio": "^1.0.0-rc.2",
 		"colour": "^0.7.1",
-		"config": "^3.2.2",
-		"ora": "^3.4.0",
-		"request": "^2.88.0",
+		"node-fetch": "^2.6.0",
+		"ora": "^4.0.3",
 		"spotify-playing": "^1.0.1"
 	}
 }

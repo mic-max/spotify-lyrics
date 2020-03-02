@@ -7,7 +7,6 @@ const lyrics = [
 	'LAST'
 ]
 
-/* eslint no-unused-vars: "off"*/
 function loadLyrics(music, done) {
 	for (let lyric of lyrics) {
 		if (lyric === 'LAST')

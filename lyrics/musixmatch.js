@@ -1,7 +1,7 @@
 'use strict'
 
 const cheerio = require('cheerio')
-const request = require('request')
+const fetch = require('node-fetch');
 
 function createUrl(artist, song) {
 	const whole = `${artist.replace(/^the /ig, '')}/${song}`
@@ -15,13 +15,16 @@ function createUrl(artist, song) {
 function musixmatch(music, done) {
 	let link = createUrl(music.artist, music.song)
 
-	request(link, (err, res, body) => {
-		if (err || res.statusCode !== 200)
+	fetch(link)
+		.then(res => res.text())
+		.then(body => {
+			let $ = cheerio.load(body)
+			const rawData = $('p.mxm-lyrics__content').text().trim()
+			done(null, rawData)
+		})
+		.catch(err => {
 			return done('Not Available on MusixMatch')
-		let $ = cheerio.load(body)
-		const rawData = $('p.mxm-lyrics__content').text()
-		done(null, rawData)
-	})
+		})
 }
 
 module.exports = musixmatch
