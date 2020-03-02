@@ -18,7 +18,7 @@ function renderLyrics(now) {
 
 	function printLyrics(err, data) {
 		if (err)
-			return console.log(err, ':(') // TODO: emoji
+			return console.error(err)
 		
 		const lines = data.split('\n')
 		for (let line of lines) {
@@ -49,7 +49,7 @@ function renderLyrics(now) {
 
 // MAIN
 if (!playing) {
-	console.log('Operating System Not Supported.')
+	console.error('Operating System Not Supported.')
 	process.exit(1)
 }
 

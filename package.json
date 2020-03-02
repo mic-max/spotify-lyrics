@@ -27,7 +27,7 @@
 	"dependencies": {
 		"colour": "^0.7.1",
 		"ora": "^4.0.3",
-		"spotify-playing": "^1.0.1",
-		"lyric-fetcher": "^1.0.0"
+		"spotify-playing": "1.x",
+		"lyric-fetcher": "1.x"
 	}
 }
