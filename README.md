@@ -3,7 +3,7 @@
 > View lyrics to the songs you're listening to on spotify
 
 ## Install
-Ensure you have [Node.js]() version 8+ installed. Then run the following:  
+Ensure you have [Node.js](https://nodejs.org) installed. Then run the following:  
 `$ npm install --global spotify-lyrics`
 
 ## Usage
