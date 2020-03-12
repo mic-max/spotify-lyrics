@@ -1,10 +1,10 @@
 {
 	"name": "spotify-lyrics",
+	"main": "index.js",
 	"version": "1.0.5",
 	"description": "Prints lyrics to currently playing song on spotify.",
-	"main": "index.js",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
+		"test": "ava",
 		"start": "node index.js"
 	},
 	"keywords": [
@@ -15,8 +15,7 @@
 		"lyrics": "index.js"
 	},
 	"files": [
-		"index.js",
-		"lyrics"
+		"index.js"
 	],
 	"author": {
 		"name": "Michael Maxwell",
@@ -29,5 +28,8 @@
 		"ora": "^4.0.3",
 		"spotify-playing": "1.x",
 		"lyric-fetcher": "1.x"
+	},
+	"devDependencies": {
+		"ava": "^3.5.0"
 	}
 }

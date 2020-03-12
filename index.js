@@ -1,11 +1,10 @@
 #!/usr/bin/env node
 'use strict'
 
-const colour = require('colour')
+require('colour')
 const ora = require('ora')
-const playing = require('spotify-playing')
-
 const lyrics = require('lyric-fetcher')
+const playing = require('spotify-playing')
 
 function renderLyrics(now) {
 	// count lines > console.width

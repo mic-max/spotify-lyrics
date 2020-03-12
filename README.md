@@ -1,6 +1,8 @@
 # Spotify Lyrics
 
-> View lyrics to the songs you're listening to on spotify
+![Node.js Package](https://github.com/mic-max/spotify-lyrics/workflows/Node.js%20Package/badge.svg) ![NPM Version](https://img.shields.io/npm/v/spotify-lyrics.svg)
+
+> View lyrics to the songs you're listening to on Spotify
 
 ## Install
 Ensure you have [Node.js](https://nodejs.org) installed. Then run the following:  
@@ -9,4 +11,4 @@ Ensure you have [Node.js](https://nodejs.org) installed. Then run the following:
 ## Usage
 `$ lyrics`
 
-![screenshot](https://github.com/mic-max/spotify-lyrics/blob/master/demo.png)
+![screenshot](https://i.imgur.com/sXd9UoO.png)
