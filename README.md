@@ -6,7 +6,7 @@
 
 ## Install
 Ensure you have [Node.js](https://nodejs.org) installed. Then run the following:  
-`$ npm install --global spotify-lyrics`
+`$ npm i -g spotify-lyrics`
 
 ## Usage
 `$ lyrics`
