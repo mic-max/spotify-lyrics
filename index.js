@@ -1,65 +1,62 @@
-#!/usr/bin/env node
 'use strict'
 
 require('colour')
 const ora = require('ora')
-const lyrics = require('lyric-fetcher')
+const fetch = require('node-fetch')
 const playing = require('spotify-playing')
 
-function renderLyrics(now) {
-	// count lines > console.width
-	const clearScreen = numLines =>
-		console.log('\n'.repeat(Math.max(process.stdout.rows - numLines - 4, 0)))
+let lastMusic = {}
+const spinner = ora('Loading').start()
 
-	function printLyrics(err, data) {
+function lyrics(music, done) {
+	fetch(`https://mic-max.api.stdlib.com/lyrics/?artist=${music.artist}&song=${music.song}`)
+		.then(res => res.json())
+		.then(data => {
+			if (data.lyrics === null)
+				return done('Lyrics Not Available')
+			return done(null, data.lyrics)
+		})
+		.catch(err => {
+			return done('Endpoint Not Available')
+		})
+}
+
+function clearScreen(numLines) {
+	console.log('\n'.repeat(Math.max(process.stdout.rows - numLines - 4, 0)))
+}
+
+function renderLyrics(music) {
+	console.log(`${music.artist.magenta} - ${music.song.cyan}`)
+	console.log('-'.repeat(80).rainbow)
+
+	spinner.start('Fetching')
+	lyrics(music, (err, lines) => {
+		spinner.stop()
 		if (err)
-			return console.error(err)
+			return console.log(err)
 		
-		const lines = data.split('\n')
 		for (let line of lines) {
 			if (line.match(/^\[.*?\]$/g))
 				console.log(line.blue)
-			else {
-				let found = line.match(/^(.*?)(\(.+?\))?$/)
-				console.log(found[1].white + (found[2] ? found[2].grey : ''))
-			}
+			else
+				console.log(line.white)
 		}
 
 		let wideys = lines.filter(v => v.length > process.stdout.columns).length
 		clearScreen(lines.length + wideys)
-	}
-
-	console.log(`${now.artist.magenta} - ${now.song.cyan}`)
-	console.log('-'.repeat(80).rainbow)
-	lyrics(now, (err, data) => {
-		printLyrics(err, data)
 	})
 }
-
-// MAIN
-if (!playing) {
-	console.error('Operating System Not Supported.')
-	process.exit(1)
-}
-
-let last = {}
-const spinner = ora('Loading').start()
 
 !function main() {
-	playing((err, now) => {
+	playing((err, music) => {
 		if (err)
-			return spinner.text = 'Cannot find Spotify process'
-
-		if (!now)
-			return spinner.text = 'Nothing playing on Spotify'
-
+			return spinner.start(err)
 		spinner.stop()
-
-		if (now.artist && now.song && JSON.stringify(last) !== JSON.stringify(now)) {
-			// TODO: show loading spinner while fetching lyrics
-			renderLyrics(now)
-			last = now
+		
+		if (music.artist && music.song && JSON.stringify(lastMusic) !== JSON.stringify(music)) {
+			renderLyrics(music)
+			lastMusic = music
 		}
-		setTimeout(main, 1500)
 	})
+	setTimeout(main, 1500)
 }()
