@@ -14,7 +14,8 @@ Ensure you have [Node.js](https://nodejs.org) installed. Then run the following:
 ![screenshot](https://i.imgur.com/sXd9UoO.png)
 
 ## Cache
-To clear the cached songs delete the file located at: `TODO/.cache/m`
+To clear the cached songs delete the following file:  
+`%AppData%/Roaming/npm/node_modules/spotify-lyrics/flat-cache/.cache/m`
 
 ## To do
 - Show lyrics in quotation marks or brackets in different colours
