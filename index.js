@@ -4,12 +4,21 @@
 require('colour')
 const ora = require('ora')
 const fetch = require('node-fetch')
+const flatCache = require('flat-cache')
 const playing = require('spotify-playing')
 
+// Globals
 let lastMusic = {}
 const spinner = ora('Loading').start()
+const cache = flatCache.load('m')
 
 function lyrics(music, done) {
+	// Check Cache
+	const cachedLyrics = cache.getKey(JSON.stringify(music))
+	if (cachedLyrics)
+		return done(null, cachedLyrics)
+
+	// Make API Request
 	fetch(`https://mic-max.api.stdlib.com/lyrics/?artist=${music.artist}&song=${music.song}`)
 		.then(res => res.json())
 		.then(data => {
@@ -17,9 +26,7 @@ function lyrics(music, done) {
 				return done('Lyrics Not Available')
 			return done(null, data.lyrics)
 		})
-		.catch(err => {
-			return done('Endpoint Not Available')
-		})
+		.catch(err => done('Endpoint Not Available'))
 }
 
 function clearScreen(numLines) {
@@ -32,10 +39,10 @@ function renderLyrics(music) {
 
 	spinner.start('Fetching')
 	lyrics(music, (err, lines) => {
-		spinner.stop()
 		if (err)
-			return console.log(err)
+			return spinner.fail(err)
 		
+		spinner.stop()
 		for (let line of lines) {
 			if (line.match(/^\[.*?\]$/g))
 				console.log(line.blue)
@@ -45,8 +52,28 @@ function renderLyrics(music) {
 
 		let wideys = lines.filter(v => v.length > process.stdout.columns).length
 		clearScreen(lines.length + wideys)
+
+		// Save to Cache
+		cache.setKey(JSON.stringify(music), lines)
 	})
 }
+
+// Windows SIGINT Workaround: https://stackoverflow.com/a/14861513
+if (process.platform === 'win32') {
+	const rl = require('readline').createInterface({
+		input: process.stdin,
+		output: process.stdout
+	})
+
+	rl.on('SIGINT', () => process.emit('SIGINT'))
+}
+
+process.on('SIGINT', () => {
+	spinner.start('Saving')
+	cache.save(true)
+	spinner.succeed()
+	process.exit(0)
+})
 
 !function main() {
 	playing((err, music) => {
@@ -59,5 +86,5 @@ function renderLyrics(music) {
 			lastMusic = music
 		}
 	})
-	setTimeout(main, 1500)
+	setTimeout(main, 2000)
 }()

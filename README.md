@@ -12,3 +12,11 @@ Ensure you have [Node.js](https://nodejs.org) installed. Then run the following:
 `$ lyrics`
 
 ![screenshot](https://i.imgur.com/sXd9UoO.png)
+
+## Cache
+To clear the cached songs delete the file located at: `TODO/.cache/m`
+
+## To do
+- Show lyrics in quotation marks or brackets in different colours
+- Increase coverage by scraping a second website
+- More server logging - might need to send IP address in request
