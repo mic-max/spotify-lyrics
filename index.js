@@ -41,7 +41,7 @@ function renderLyrics(music) {
 	lyrics(music, (err, lines) => {
 		if (err)
 			return spinner.fail(err)
-		
+
 		spinner.stop()
 		for (let line of lines) {
 			if (line.match(/^\[.*?\]$/g))
@@ -80,7 +80,7 @@ process.on('SIGINT', () => {
 		if (err)
 			return spinner.start(err)
 		spinner.stop()
-		
+
 		if (music.artist && music.song && JSON.stringify(lastMusic) !== JSON.stringify(music)) {
 			renderLyrics(music)
 			lastMusic = music
