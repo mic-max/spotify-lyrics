@@ -28,7 +28,7 @@
 	"dependencies": {
 		"colour": "^0.7.1",
 		"flat-cache": "^3.0.4",
-		"node-fetch": "^2.6.1",
+		"node-fetch": "^3.3.1",
 		"ora": "^5.1.0",
 		"spotify-playing": "^1.0.8"
 	},
